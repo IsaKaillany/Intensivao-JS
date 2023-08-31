@@ -8,7 +8,7 @@
     <title>Magazine Hashtag</title>
 </head>
 <body class="bg-stone-200 flex flex-col">
-    <section id="carrinho" class="fixed top-0 right-[-360px] bg-indigo-950 h-screen w-[360px] text-slate-200">
+    <section id="carrinho" class="fixed top-0 right-[-360px] bg-slate-950 h-screen w-[360px] text-slate-200 z-50">
         <div id="cabecalhoCarrinho" class="flex justify-between m-4">
             <p>Meu carrinho</p>
             <button id="fecharCarrinho"><i class="fa-solid fa-circle-xmark"></i></button>
@@ -21,19 +21,19 @@
         <p id="precoTotal">$200</p>
         <button class="bg-slate-200 text-slate-900 p-1">Finalizar Compra</button>
     </section>
-    <header class="flex bg-slate-950 px-8 py-4 justify-between sticky">
+    <header class="flex bg-slate-950 px-8 py-4 justify-between sticky top-0 shadow-slate-400 shadow-xl text-xl">
         <img 
             src="./assets/logo/hashtag.svg" 
             alt="Logo do Magazine Hashtag" 
             class="h-16"
         >
         <div class="text-slate-200 flex gap-2 items-end mx-2">
-            <button id="abrirCarrinho"><i class="fa-solid fa-cart-shopping"></i></button>
-            <button><i class="fa-solid fa-user"></i></button>
+            <button id="abrirCarrinho" class="mx-2"><i class="fa-solid fa-cart-shopping"></i></button>
+            <button class="mr-2"><i class="fa-solid fa-user"></i></button>
         </div>
     </header>
     <main>
-        <section id="containerProduto" class="flex flex-wrap"></section>
+        <section id="containerProduto" class="flex flex-wrap p-10 justify-center gap-10"></section>
     </main>
 
     <script type="module" src="main.js"></script>
