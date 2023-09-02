@@ -20,12 +20,21 @@ export function inicializarCarrinho() {
     botaoAbrirCarrinho.addEventListener("click", abrirCarrinho);
 }
 
+function removerDoCarrinho(idProduto) {
+    delete idsProdutoCarrinhoQuantidade[idProduto];
+    renderizarProdutosCarrinho();
+}
+
 function incrementarQuantidade(idProduto) {
     idsProdutoCarrinhoQuantidade[idProduto]++;
     atualizarQuantidade(idProduto);
 }
 
 function decrementarQuantidade(idProduto) {
+    if (idsProdutoCarrinhoQuantidade[idProduto] === 1) {
+        removerDoCarrinho(idProduto);
+        return;
+    }
     idsProdutoCarrinhoQuantidade[idProduto]--;
     atualizarQuantidade(idProduto);
 }
@@ -35,24 +44,18 @@ function atualizarQuantidade(idProduto) {
         idsProdutoCarrinhoQuantidade[idProduto];
 }
 
-export function adicionarAoCarrinho(idProduto) {
-    if (idProduto in idsProdutoCarrinhoQuantidade) {
-        incrementarQuantidade(idProduto);
-        return;
-    }
-    idsProdutoCarrinhoQuantidade[idProduto] = 1;
+function desenharProdutoCarrinho(idProduto) {
     const produto = catalogo.find((p) => p.id === idProduto);
-
     const containerProdutosCarrinho =
         document.getElementById("produtosCarrinho");
-        
+
     const elementoArticle = document.createElement("article");
     const articleClasses = [
         "flex",
         "bg-slate-100",
         "rounded-lg",
         "p-1",
-        "relative"
+        "relative",
     ];
 
     for (const articleClass of articleClasses) {
@@ -60,7 +63,7 @@ export function adicionarAoCarrinho(idProduto) {
     }
 
     const cardProdutoCarrinho = `
-        <button id="fecharCarrinho" class="absolute top-0 right-2"><i class="fa-solid fa-circle-xmark text-slate-500 hover:text-slate-800"></i></button>
+        <button id="removerItem${produto.id}" class="absolute top-0 right-2"><i class="fa-solid fa-circle-xmark text-slate-500 hover:text-slate-800"></i></button>
         <img src="./assets/img/${produto.imagem}" alt="Carrinho: ${
         produto.nome
     }" class="h-24 rounded-lg">
@@ -87,4 +90,28 @@ export function adicionarAoCarrinho(idProduto) {
     document
         .getElementById(`decrementarProduto${produto.id}`)
         .addEventListener("click", () => decrementarQuantidade(produto.id));
+
+    document
+        .getElementById(`removerItem${produto.id}`)
+        .addEventListener("click", () => removerDoCarrinho(produto.id));
+}
+
+function renderizarProdutosCarrinho() {
+    const containerProdutosCarrinho =
+        document.getElementById("produtosCarrinho");
+    containerProdutosCarrinho.innerHTML = "";
+
+    for (const idProduto in idsProdutoCarrinhoQuantidade) {
+        desenharProdutoCarrinho(idProduto);
+    }
+}
+
+export function adicionarAoCarrinho(idProduto) {
+    if (idProduto in idsProdutoCarrinhoQuantidade) {
+        incrementarQuantidade(idProduto);
+        return;
+    }
+
+    idsProdutoCarrinhoQuantidade[idProduto] = 1;
+    desenharProdutoCarrinho(idProduto);
 }
