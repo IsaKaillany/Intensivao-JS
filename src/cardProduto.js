@@ -18,7 +18,6 @@ export function renderizarCatalogo() {
         document
             .getElementById(`adicionar${produtoCatalogo.id}`)
             .addEventListener("click", () =>
-                adicionarAoCarrinho(produtoCatalogo.id)
-            );
+                adicionarAoCarrinho(produtoCatalogo.id));
     }
 }
