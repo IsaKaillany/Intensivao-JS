@@ -1,6 +1,6 @@
-import { catalogo } from "./utilidades";
+import { catalogo, salvarLocalStorage, lerLocalStorage } from "./utilidades";
 
-const idsProdutoCarrinhoQuantidade = {};
+const idsProdutoCarrinhoQuantidade = lerLocalStorage("carrinho") ?? {};
 
 function abrirCarrinho() {
     document.getElementById("carrinho").classList.remove("right-[-360px]");
@@ -23,12 +23,14 @@ export function inicializarCarrinho() {
 
 function removerDoCarrinho(idProduto) {
     delete idsProdutoCarrinhoQuantidade[idProduto];
+    salvarLocalStorage("carrinho", idsProdutoCarrinhoQuantidade);
     atualizarPrecoCarrinho();
     renderizarProdutosCarrinho();
 }
 
 function incrementarQuantidade(idProduto) {
     idsProdutoCarrinhoQuantidade[idProduto]++;
+    salvarLocalStorage("carrinho", idsProdutoCarrinhoQuantidade);
     atualizarPrecoCarrinho();
     atualizarQuantidade(idProduto);
 }
@@ -39,6 +41,7 @@ function decrementarQuantidade(idProduto) {
         return;
     }
     idsProdutoCarrinhoQuantidade[idProduto]--;
+    salvarLocalStorage("carrinho", idsProdutoCarrinhoQuantidade);
     atualizarPrecoCarrinho();
     atualizarQuantidade(idProduto);
 }
@@ -67,7 +70,9 @@ function desenharProdutoCarrinho(idProduto) {
     }
 
     const cardProdutoCarrinho = `
-        <button id="removerItem${produto.id}" class="absolute top-0 right-2"><i class="fa-solid fa-circle-xmark text-slate-500 hover:text-slate-800"></i></button>
+        <button id="removerItem${
+            produto.id
+        }" class="absolute top-0 right-2"><i class="fa-solid fa-circle-xmark text-slate-500 hover:text-slate-800"></i></button>
         <img src="./assets/img/${produto.imagem}" alt="Carrinho: ${
         produto.nome
     }" class="h-24 rounded-lg">
@@ -100,7 +105,7 @@ function desenharProdutoCarrinho(idProduto) {
         .addEventListener("click", () => removerDoCarrinho(produto.id));
 }
 
-function renderizarProdutosCarrinho() {
+export function renderizarProdutosCarrinho() {
     const containerProdutosCarrinho =
         document.getElementById("produtosCarrinho");
     containerProdutosCarrinho.innerHTML = "";
@@ -117,8 +122,9 @@ export function adicionarAoCarrinho(idProduto) {
     }
 
     idsProdutoCarrinhoQuantidade[idProduto] = 1;
-    atualizarPrecoCarrinho();
+    salvarLocalStorage("carrinho", idsProdutoCarrinhoQuantidade);
     desenharProdutoCarrinho(idProduto);
+    atualizarPrecoCarrinho();
 }
 
 export function atualizarPrecoCarrinho() {
